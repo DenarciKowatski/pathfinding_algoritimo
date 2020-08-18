@@ -17,12 +17,13 @@ function removeFromArray(arr, elt) {
 }
 
 function heuristic(a, b){//calcula a hipose mais curta
-    var distancia = dist(a.i, a.j, b.i, b.j);//pega a casa atual e o final;
+    //var distancia = dist(a.i, a.j, b.i, b.j);//pega a casa atual e o final;
+    var distancia = abs(a.i - b.i)+ abs(a.j - b.j);
     return distancia;
 }
 
 var cols = 20;// determina colunas;
-var rows = 10;// determina linhas
+var rows = 20;// determina linhas
 var grid = new Array(cols); // cria tebela
 
 
@@ -42,6 +43,7 @@ function Spot(i, j) {
     this.h = 0;
     this.neighbors = [];//vizinhos
     this.previus = undefined;
+    this.wall = false;//parede;
 
     this.show = function (col) {//printa a tabela
         fill(col);
@@ -117,14 +119,8 @@ function draw() {
         var current = openSet[winner];
 
         if (current === end) {//se a casa for a de destino acabou aqui
-            path = [];
-            var temp = current;
-            path.push(temp);
-            while(temp.previus){
-                path.push(temp.previus);
-                temp = temp.previus;
-            }
-
+           
+            noLoop();
             console.log("Deu certo o fim");
         }
 
@@ -174,6 +170,14 @@ function draw() {
         openSet[i].show(color(0, 255, 0));
     }
 
+    //mostra ao caminho e esta sendo percorrido
+    path = [];
+    var temp = current;
+    path.push(temp);
+    while(temp.previus){
+        path.push(temp.previus);
+        temp = temp.previus;
+    }
     for (var i = 0; i < path.length; i++) {//marca o caminho
         path[i].show(color(0, 0, 255));
     }
